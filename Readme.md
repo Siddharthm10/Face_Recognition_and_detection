@@ -11,7 +11,7 @@
 10. If known , add the person to the database
 
 
-- [ ] - Motion Detection
+- [x] - Motion Detection
 - [ ] - Human Detection (or Object Detection)
 - [ ] - Face Detection
 - [ ] - Face Recognition
