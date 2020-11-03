@@ -11,19 +11,30 @@ first_frame = None #Stagnant frame from which we'll compare
 status_list = [None,None] # This keeps a record of motion
 times = [] #This keeps the time stamp of detected motion (different for different objects)
 df = pd.DataFrame(columns = ["Start", "End"]) #columns to keep the record of motionstart and motionend
-face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')#Pretrained cascade classfier to get the location of face
 
 # cv2.namedWindow("output", cv2.WINDOW_NORMAL) 
 # cv2.resizeWindow("output", 1920, 1080)
 # cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
 cap = cv2.VideoCapture(0)
+frame_width = int(cap.get(3)) 
+frame_height = int(cap.get(4)) 
+size = (frame_width, frame_height)
+fps = int(cap.get(cv2.CAP_PROP_FPS))
+
+result = cv2.VideoWriter('Face_detection/filename.avi',  
+                        cv2.VideoWriter_fourcc(*'MJPG'), 
+                        fps, size)
+
 
 # print("after")
 while(True):
     #Read Input
     ret, frame = cap.read()
     status = 0
-    # frame = frame[:][300:]
+    # frame = frame[:][100:]
+    #resized to 534*400(after trimming the time stamp)
+    frame = cv2.resize(frame, (534,400))
     #Grayscale Conversion
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray,(21,21),0)
@@ -32,6 +43,8 @@ while(True):
         first_frame = gray
         continue
 
+
+    
     #Calculates difference to detect motion
     delta_frame = cv2.absdiff(first_frame, gray)
     #Applies Threshold
@@ -57,11 +70,13 @@ while(True):
             '''We iterate through our faces array and draw a rectangle over each face in faces'''
             for (x,y,w,h) in faces:
                 cv2.rectangle(frame, (x,y), (x+w,y+h), (127,0,255), 2)
-                cv2.imshow('Face Detection', frame)
-                # new = frame[x:x+w][y:y+h]
+                # new = frame[x:x+w][y:y+h] 
 
+            # cv2.imshow('Face Detection', frame)
         #saving the image of the moving object
-        cv2.imwrite("face_detection/face.jpg", frame)
+        # cv2.imwrite("face_detection/face.jpg", frame)
+        #Saving the video if motion is detected
+        result.write(frame)
     
     #appending the motion detection status
     status_list.append(status)
@@ -76,9 +91,9 @@ while(True):
         times.append(datetime.now())
     
     # Show Output
-    cv2.imshow('capturing', gray)#gray scale image
-    cv2.imshow('delta', delta_frame)#difference btween the first and current frame
-    cv2.imshow('thresh', thresh_delta)#thresholded frame
+    # cv2.imshow('capturing', gray)#gray scale image
+    # cv2.imshow('delta', delta_frame)#difference btween the first and current frame
+    # cv2.imshow('thresh', thresh_delta)#thresholded frame
     cv2.imshow("frame",frame)#Frame
 
     #Quiting (Reading the key)

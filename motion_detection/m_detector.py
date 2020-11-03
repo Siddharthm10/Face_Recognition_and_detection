@@ -12,17 +12,27 @@ status_list = [None,None] # This keeps a record of motion
 times = [] #This keeps the time stamp of detected motion (different for different objects)
 df = pd.DataFrame(columns = ["Start", "End"]) #columns to keep the record of motionstart and motionend
 
-# cv2.namedWindow("output", cv2.WINDOW_NORMAL) 
 # cv2.resizeWindow("output", 1920, 1080)
-cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
-# cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
+cap = cv2.VideoCapture(0)
+# frame_width = int(cap.get(3)) 
+# frame_height = int(cap.get(4)) 
+# size = (frame_width, frame_height)
+fps = int(cap.get(cv2.CAP_PROP_FPS))
+# initiates a video Writer - location/filename, writing format, fps, size(dimensions)
+result = cv2.VideoWriter('motion_detection/filename.avi',  
+                        cv2.VideoWriter_fourcc(*'MJPG'), 
+                        fps, (534,400))
+
 
 # print("after")
 while(True):
     #Read Input
     ret, frame = cap.read()
     status = 0
-    frame = frame[:][300:]
+    frame = frame[:][100:]
+    #resized to 534*400(after trimming the time stamp)
+    frame = cv2.resize(frame, (534,400))
     #Grayscale Conversion
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray,(21,21),0)
@@ -50,7 +60,9 @@ while(True):
         (x, y, w, h) = cv2.boundingRect(contour)
         cv2.rectangle(frame, (x,y), (x+w, y+h), (0,255,0), 3)
         #saving the image of the moving object
-        cv2.imwrite("motion_detection/spotted.jpg", frame)
+        # cv2.imwrite("motion_detection/spotted.jpg", frame)
+        #saving the video
+        result.write(frame)
     
     #appending the motion detection status
     status_list.append(status)
@@ -65,9 +77,9 @@ while(True):
         times.append(datetime.now())
     
     # Show Output
-    cv2.imshow('capturing', gray)#gray scale image
-    cv2.imshow('delta', delta_frame)#difference btween the first and current frame
-    cv2.imshow('thresh', thresh_delta)#thresholded frame
+    # cv2.imshow('capturing', gray)#gray scale image
+    # cv2.imshow('delta', delta_frame)#difference btween the first and current frame
+    # cv2.imshow('thresh', thresh_delta)#thresholded frame
     cv2.imshow("frame",frame)#Frame
 
     #Quiting (Reading the key)
