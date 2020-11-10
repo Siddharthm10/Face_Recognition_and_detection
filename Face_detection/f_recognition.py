@@ -42,15 +42,16 @@ if __name__ == "__main__":
     start = time.time()
     # count = 0
     while True:
-        # count = count + 1
+        
         success, img = cap.read()
         img = img[:][150:]
         imgS = cv2.resize(img, (0,0), None, 0.25, 0.25)
         imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
         
+
         facesCurFrame = fr.face_locations(imgS)
         encodeCurFrame = fr.face_encodings(imgS, facesCurFrame)
-
+        # for faceCurFrame in facesCurFrame:
         for encodeFace, faceLoc in zip(encodeCurFrame, facesCurFrame):
             matches = fr.compare_faces(encodeListKnown, encodeFace)
             faceDis = fr.face_distance(encodeListKnown, encodeFace)
@@ -62,17 +63,19 @@ if __name__ == "__main__":
                 # print(name)
                 # time.sleep(10)
                 y1, x2, y2, x1 = faceLoc
-                y1, x2, y2, x1 = y1*2, x2*2, y2*2, x1*2
+                y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
                 cv2.rectangle(img, (x1,y1), (x2,y2), (0,255,0),2)
                 cv2.rectangle(img, (x1,y2-35), (x2,y2),(0,255,255), cv2.FILLED)
                 cv2.putText(img, name, (x1+6,y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),2)
                 cv2.imwrite("output.jpg", img)    
                 markAttendance(name)
 
+        print(facesCurFrame)
         
         cv2.imshow("Webcam", img)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+    
         # if(count>120):
         #     break
     # end = time.time()

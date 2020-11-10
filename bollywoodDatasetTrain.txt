@@ -1,0 +1,71 @@
+./Randeep_Hooda/102.jpg,unknown_person-------------------------------Fake
+./Randeep_Hooda/4.jpeg,no_persons_found------------------------------Fake
+./Randeep_Hooda/34.jpg,no_persons_found------------------------------Side Angle ------------Inaccuracy
+./Randeep_Hooda/5.jpg,unknown_person---------------------------------Not a good Image-------Inaccuracy(second time)
+./Randeep_Hooda/64.jpg,unknown_person-------------------------------------------------------Inaccuracy
+./Randeep_Hooda/46.jpg,unknown_person-------------------------------------------------------Inaccuracy
+./Randeep_Hooda/71.jpg,unknown_person--------------------------------Too Small Image--------Inaccuracy
+./Randeep_Hooda/88.jpeg,no_persons_found-----------------------------Fake
+./Randeep_Hooda/55.jpg,unknown_person-------------------------------------------------------Inaccuracy(second time)
+
+
+Inaccurate : 4/116   Accurate : 112/116 - 96.5%
+
+./Ranveer_Singh/122.jpg,unknown_person------------------------------------------------------Inaccuracy(second Time)
+./Ranveer_Singh/87.jpg,no_persons_found------------------------------Side Angle-------------Inaccuracy
+./Ranveer_Singh/106.jpg,no_persons_found-----------------------------Side Angle-------------Inaccuracy
+./Ranveer_Singh/75.jpg,Ritesh DeshMukh------------------------------------------------------Inaccuracy
+./Ranveer_Singh/79.jpg,no_persons_found-----------------------------------------------------Same as  image 87
+./Ranveer_Singh/53.jpg,no_persons_found------------------------------Side Angle-------------Inaccuracy
+./Ranveer_Singh/26.jpg,Ritesh DeshMukh------------------------------------------------------Inaccuracy
+./Ranveer_Singh/33.jpg,no_persons_found------------------------------Side Angle-------------Inaccuracy
+./Ranveer_Singh/30.jpg,unknown_person--------------------------------Too Much beard---------Inaccuracy(second time)
+./Ranveer_Singh/43.jpg,no_persons_found------------------------------Tilted-----------------Inaccuracy
+./Ranveer_Singh/38.jpg,unknown_person-------------------------------------------------------Inaccuracy
+./Ranveer_Singh/71.jpg,no_persons_found-----------------------------------------------------Inaccuracy
+./Ranveer_Singh/99.jpg,no_persons_found------------------------------Side Angle ------------Inaccuracy
+./Ranveer_Singh/83.jpg,unknown_person-------------------------------------------------------Inaccuracy
+./Ranveer_Singh/21.jpg,unknown_person-------------------------------------------------------Inaccuracy
+./Ranveer_Singh/2.jpg,Ritesh DeshMukh-------------------------------------------------------Inaccuracy
+./Ranveer_Singh/112.jpg,unknown_person------------------------------------------------------Inaccuracy(same as 122)
+./Ranveer_Singh/42.jpg,unknown_person-------------------------------------------------------Inaccuracy
+
+Inaccurate : 16/131   Accurate : 115/131 - 87.7%
+
+
+./Richa_Chadda/8.jpg,unknown_person---------------------------------------------------------Inaccuracy(second Time)
+./Richa_Chadda/103.jpg,unknown_person-------------------------------------------------------Inaccuracy
+./Richa_Chadda/80.jpg,unknown_person--------------------------------------------------------Inaccuracy
+./Richa_Chadda/64.jpg,unknown_person--------------------------------------------------------Inaccuracy(second Time)
+./Richa_Chadda/4.jpg,unknown_person---------------------------------------------------------Inaccuracy
+./Richa_Chadda/47.jpg,unknown_person--------------------------------------------------------Inaccuracy
+./Richa_Chadda/66.jpg,unknown_person--------------------------------------------------------Inaccuracy(second Time)
+./Richa_Chadda/25.jpg,unknown_person--------------------------------------------------------Inaccuracy
+./Richa_Chadda/105.jpg,unknown_person-------------------------------------------------------Inaccuracy
+./Richa_Chadda/100.jpg,no_persons_found------------------------------Side Angle ------------Inaccuracy
+./Richa_Chadda/13.jpg,unknown_person--------------------------------------------------------Inaccuracy
+./Richa_Chadda/117.jpeg,unknown_person------------------------------------------------------Inaccuracy
+
+Inaccurate : 9/120   Accurate : 111/120 - 92.5%
+
+
+./Shahid_Kapoor/24.jpg,Ranveer Singh---------------------------------------------------------Inaccuracy
+./Shahid_Kapoor/94.jpg,unknown_person--------------------------------------------------------Inaccuracy
+./Shahid_Kapoor/52.jpg,no_persons_found------------------------------Side Angle -------------Inaccuracy
+./Shahid_Kapoor/75.jpg,Ranveer Singh---------------------------------------------------------Inaccuracy
+./Shahid_Kapoor/6.png,unknown_person---------------------------------------------------------Inaccuracy
+./Shahid_Kapoor/96.jpg,unknown_person--------------------------------------------------------Inaccuracy(same as 24)
+./Shahid_Kapoor/20.jpg,unknown_person--------------------------------------------------------Inaccuracy
+./Shahid_Kapoor/125.jpg,Randeep hudda--------------------------------------------------------Inaccuracy(second Time)
+./Shahid_Kapoor/67.jpg,no_persons_found------------------------------Side Angle -------------Inaccuracy
+./Shahid_Kapoor/43.jpg,unknown_person--------------------------------------------------------Inaccuracy
+./Shahid_Kapoor/84.jpg,unknown_person--------------------------------------------------------Inaccuracy(second Time)
+./Shahid_Kapoor/90.jpg,unknown_person--------------------------------Bad Quality Image-------Inaccuracy(pass)
+./Shahid_Kapoor/73.jpg,unknown_person--------------------------------------------------------Inaccuracy(second Time)
+./Shahid_Kapoor/2.jpg,unknown_person---------------------------------------------------------Inaccuracy
+./Shahid_Kapoor/95.jpg,no_persons_found------------------------------Too Much beard----------Inaccuracy
+
+Inaccurate : 10/147  Accurate : 137/147 - 93.19%
+
+
+Average Accuracy : 92.475%
