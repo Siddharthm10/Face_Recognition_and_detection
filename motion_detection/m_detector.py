@@ -13,8 +13,8 @@ times = [] #This keeps the time stamp of detected motion (different for differen
 df = pd.DataFrame(columns = ["Start", "End"]) #columns to keep the record of motionstart and motionend
 
 
-# cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
+# cap = cv2.VideoCapture(0)
 # frame_width = int(cap.get(3)) 
 # frame_height = int(cap.get(4)) 
 # size = (frame_width, frame_height)
