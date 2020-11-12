@@ -38,7 +38,7 @@
 - [x] - Speed Issues 
   - solved: 
     - It was because of high dimensionality, which was solved after reducing the lag.
-- [ ] - Currently, when the motion is detected, the entire screen is processed due to which the processing time is high hence the slow relative speed
+- [x] - Currently, when the motion is detected, the entire screen is processed due to which the processing time is high hence the slow relative speed
   - To be solved(Choose the better solution):
     - Potential Solution: The image should be cropped to the area where the motion is detected. And only that cropped version should be processed.
       - Potential Problems we might face: If there are multiple faces in an image(or multiple motions), it is not clear that how should we crop the image.

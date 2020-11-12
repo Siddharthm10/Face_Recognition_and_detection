@@ -127,4 +127,4 @@ if __name__ == "__main__":
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    print(120/(end-start))
+    print(120/(end-start))#returns fps
