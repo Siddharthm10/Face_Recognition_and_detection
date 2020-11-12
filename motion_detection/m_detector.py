@@ -13,8 +13,8 @@ times = [] #This keeps the time stamp of detected motion (different for differen
 df = pd.DataFrame(columns = ["Start", "End"]) #columns to keep the record of motionstart and motionend
 
 
-cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
-# cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
+cap = cv2.VideoCapture(0)
 # frame_width = int(cap.get(3)) 
 # frame_height = int(cap.get(4)) 
 # size = (frame_width, frame_height)
@@ -26,10 +26,13 @@ result = cv2.VideoWriter('motion_detection/filename.avi',
 
 
 # print("after")
+count = 0
+start =time.time()
 while(True):
     #Read Input
     ret, frame = cap.read()
     status = 0
+    count = count + 1
     frame = frame[:][100:]
     #resized to 534*400(after trimming the time stamp)
     frame = cv2.resize(frame, (534,400))
@@ -77,21 +80,24 @@ while(True):
         times.append(datetime.now())
     
     # Show Output
-    cv2.imshow('capturing', gray)#gray scale image
-    cv2.imshow('delta', delta_frame)#difference btween the first and current frame
-    cv2.imshow('thresh', thresh_delta)#thresholded frame
+    # cv2.imshow('capturing', gray)#gray scale image
+    # cv2.imshow('delta', delta_frame)#difference btween the first and current frame
+    # cv2.imshow('thresh', thresh_delta)#thresholded frame
     cv2.imshow("frame",frame)#Frame
 
     #Quiting (Reading the key)
     key = cv2.waitKey(1) 
+    if count>120:
+        break
     if key == ord('q'):
         break
-
-print(status_list)
-print(times)
+end = time.time()
+# print(status_list)
+# print(times)
+print(120/ (end - start))
 #Appending the details (time) in the dataframe
-for i in range(0, len(times),2):
-    df = df.append({"Start": times[i], "End":times[i+1]},ignore_index=True)
+# for i in range(0, len(times),2):
+#     df = df.append({"Start": times[i], "End":times[i+1]},ignore_index=True)
 #Writing the csv file with the entry and exit time of the objects
 df.to_csv("motion_detection/Times.csv")
 
