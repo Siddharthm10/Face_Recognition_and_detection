@@ -8,9 +8,10 @@ import time
 
 #initializing variables
 first_frame = None #Stagnant frame from which we'll compare
+next_frame = None
 status_list = [None,None] # This keeps a record of motion
 times = [] #This keeps the time stamp of detected motion (different for different objects)
-# df = pd.DataFrame(columns = ["Start", "End"]) #columns to keep the record of motionstart and motionend
+#df = pd.DataFrame(columns = ["Start", "End"]) #columns to keep the record of motionstart and motionend
 
 
 cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
@@ -18,11 +19,11 @@ cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
 # frame_width = int(cap.get(3)) 
 # frame_height = int(cap.get(4)) 
 # size = (frame_width, frame_height)
-# fps = int(cap.get(cv2.CAP_PROP_FPS))
+fps = int(cap.get(cv2.CAP_PROP_FPS))
 # initiates a video Writer - location/filename, writing format, fps, size(dimensions)
-# result = cv2.VideoWriter('motion_detection/filename.avi',  
-                      #  cv2.VideoWriter_fourcc(*'MJPG'), 
-                       # fps, (534,400))
+result = cv2.VideoWriter('motion_detection/filename.avi',  
+                       cv2.VideoWriter_fourcc(*'MJPG'), 
+                       fps, (534,400))
 
 
 # print("after")
@@ -68,7 +69,7 @@ while(True):
         #saving the image of the moving object
         # cv2.imwrite("motion_detection/spotted.jpg", frame)
         #saving the video
-        #result.write(frame)
+        result.write(frame)
     
     #appending the motion detection status
     #status_list.append(status)
@@ -90,14 +91,14 @@ while(True):
 
     #Quiting (Reading the key)
     key = cv2.waitKey(1) 
-    if count>120:
-        break
+    # if count>120:
+        # break
     if key == ord('q'):
         break
 end = time.time()
 # print(status_list)
 # print(times)
-print(120/ (end - start))
+# print(120/ (end - start))
 #Appending the details (time) in the dataframe
 # for i in range(0, len(times),2):
 #     df = df.append({"Start": times[i], "End":times[i+1]},ignore_index=True)
