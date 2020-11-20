@@ -121,7 +121,7 @@ if __name__ == "__main__":
 
 
     # load the model, create runtime session & get input variable name
-    onnx_path = 'main/model/ultra_light_640.onnx'
+    onnx_path = 'Ultra_light_fr/model/ultra_light_640.onnx'
     onnx_model = onnx.load(onnx_path)
     onnx.checker.check_model(onnx_model)
     onnx.helper.printable_graph(onnx_model.graph)

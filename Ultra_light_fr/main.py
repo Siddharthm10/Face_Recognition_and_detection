@@ -89,7 +89,7 @@ if __name__ == "__main__":
         print("...")
 
         #Encoding
-        encodeCurFrame = fr.face_encodings(imgS, facesCurFrame)
+        encodeCurFrame = fr.face_encodings(imgS, facesCurFrame,model='small')
 
         #looping through faces
         for encodeFace, faceLoc in zip(encodeCurFrame, facesCurFrame):

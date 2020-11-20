@@ -60,7 +60,7 @@ while(True):
             continue
         #motion Detected
         status = 1
-        faces = face_classifier.detectMultiScale(gray, 1.0485258, 6)
+        faces = face_classifier.detectMultiScale(gray, 1.32, 6)
         #Drawing the rectangles around the contours identified
         # (x, y, w, h) = cv2.boundingRect(contour)
         # cv2.rectangle(frame, (x,y), (x+w, y+h), (0,255,0), 3)

@@ -21,14 +21,15 @@ embedder = cv2.dnn.readNetFromTorch('withoutFR/openface_nn4.small2.v1.t7')
 # load the actual face recognition model along with the label encoder
 recognizer = pickle.loads(open("withoutFR/output/recognizer.pickle", 'rb').read())
 le = pickle.loads(open('withoutFR/output/le.pickle', 'rb').read())
-thresholdConfidence = 0.5
-
+thresholdConfidence = 0.6
+recognizerThreshold = 0.6
 # initialize the video stream, then allow the camera sensor to warm up
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
 # vs = VideoStream('rtsp://admin:admin123@192.168.0.104:554/').start()
+# vs = VideoStream("Friends_ross.mp4").start()
 
-time.sleep(2.0)
+# time.sleep(2.0)
 # start the FPS throughput estimator
 fps = FPS().start()
 # loop over frames from the video file stream
@@ -79,15 +80,26 @@ while True:
             j = np.argmax(preds)
             proba = preds[j]
             name = le.classes_[j]
-            # draw the bounding box of the face along with the
-            # associated probability
-            text = "{}: {:.2f}%".format(name, proba * 100)
-            y = startY - 10 if startY - 10 > 10 else startY + 10
-            cv2.rectangle(frame, (startX, startY), (endX, endY),
-                (0, 0, 255), 2)
-            cv2.putText(frame, text, (startX, y),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+            if (proba>recognizerThreshold):
+                # draw the bounding box of the face along with the
+                # associated probability
+                text = "{}: {:.2f}%".format(name, proba * 100)
+                y = startY - 10 if startY - 10 > 10 else startY + 10
+                cv2.rectangle(frame, (startX, startY), (endX, endY),
+                    (0, 255, 0), 2)
+                cv2.putText(frame, text, (startX, y),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+            else:
+                # draw the bounding box of the face along with the
+                # associated probability
+                text = "{}: {:.2f}%".format("Unknown", proba * 100)
+                y = startY - 10 if startY - 10 > 10 else startY + 10
+                cv2.rectangle(frame, (startX, startY), (endX, endY),
+                    (0, 0, 255), 2)
+                cv2.putText(frame, text, (startX, y),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 
+        
 
     # update the FPS counter
     fps.update()

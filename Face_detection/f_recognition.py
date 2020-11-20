@@ -1,15 +1,15 @@
 
-def markAttendance(name):
-    with open('Face_detection/attendance.csv', 'r+') as f:
-        myDataList = f.readlines()
-        nameList = []
-        for line in myDataList:
-            entry = line.split(',')
-            nameList.append(entry[0])
-        if name not in nameList:
-            now = datetime.now()
-            dtString = now.strftime('%H:%M:%S')
-            f.writelines(f'\n{name},{dtString}')
+# def markAttendance(name):
+#     with open('Face_detection/attendance.csv', 'r+') as f:
+#         myDataList = f.readlines()
+#         nameList = []
+#         for line in myDataList:
+#             entry = line.split(',')
+#             nameList.append(entry[0])
+#         if name not in nameList:
+#             now = datetime.now()
+#             dtString = now.strftime('%H:%M:%S')
+#             f.writelines(f'\n{name},{dtString}')
 
 
 if __name__ == "__main__":
@@ -39,8 +39,8 @@ if __name__ == "__main__":
 
     encodeListKnown = list(data.values())
 
-    # cap = cv2.VideoCapture(0)
-    cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
+    cap = cv2.VideoCapture(0)
+    # cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
 
     # count = 0
     while True:
@@ -66,12 +66,19 @@ if __name__ == "__main__":
                     cv2.rectangle(img, (x1,y1), (x2,y2), (0,255,0),2)
                     cv2.rectangle(img, (x1,y2-35), (x2,y2),(0,255,255), cv2.FILLED)
                     cv2.putText(img, name, (x1+6,y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),2)
-                    cv2.imwrite("output.jpg", img)    
-                    markAttendance(name)
+                    # cv2.imwrite("output.jpg", img)    
+                    # markAttendance(name)
+                else:
+                    y1, x2, y2, x1 = faceLoc
+                    y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
+                    cv2.rectangle(img, (x1,y1), (x2,y2), (0,0,255),2)
+                    cv2.rectangle(img, (x1,y2-35), (x2,y2),(0,255,255), cv2.FILLED)
+                    cv2.putText(img, name, (x1+6,y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),2)
+
             else:
                 y1, x2, y2, x1 = faceLoc
                 y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
-                cv2.rectangle(img, (x1,y1), (x2,y2), (0,255,0),2)
+                cv2.rectangle(img, (x1,y1), (x2,y2), (0,0,255),2)
                 cv2.rectangle(img, (x1,y2-35), (x2,y2),(0,255,255), cv2.FILLED)
                 cv2.putText(img, name, (x1+6,y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),2)
 
