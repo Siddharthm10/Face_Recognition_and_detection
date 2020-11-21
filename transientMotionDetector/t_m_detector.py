@@ -1,25 +1,3 @@
-# def sort_contours(cnts, method="left-to-right"):
-#     # initialize the reverse flag and sort index
-#     reverse = False
-#     i = 0
-
-#     # handle if we need to sort in reverse
-#     if method == "right-to-left" or method == "bottom-to-top":
-#         reverse = True
-
-#     # handle if we are sorting against the y-coordinate rather than
-#     # the x-coordinate of the bounding box
-#     if method == "top-to-bottom" or method == "bottom-to-top":
-#         i = 1
-
-#     # construct the list of bounding boxes and sort them from top to
-#     # bottom
-#     boundingBoxes = [cv2.boundingRect(c) for c in cnts]
-#     (cnts, boundingBoxes) = zip(*sorted(zip(cnts, boundingBoxes),
-#                                         key=lambda b: b[1][i], reverse=reverse))
-
-#     # return the list of sorted contours and bounding boxes
-#     return (cnts, boundingBoxes)
 
 
 if __name__ == '__main__':
@@ -54,16 +32,27 @@ if __name__ == '__main__':
     #(in program cycles) for the program to declare that there is no movement
     MOVEMENT_DETECTED_PERSISTENCE = 100
 
+
+    # Counter for saving the photos & exiting the program
+    count=0
+
     # =============================================================================
     # CORE PROGRAM
     # =============================================================================
 
 
     # Create capture object
-    cap = cv2.VideoCapture(5) # Flush the stream
-    cap.release()
-    cap = cv2.VideoCapture(0) # Then start the webcam
-    # cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
+    # cap = cv2.VideoCapture(5) # Flush the stream
+    # cap.release()
+    # cap = cv2.VideoCapture(0) # Then start the webcam
+    cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
+    # fps = int(cap.get(cv2.CAP_PROP_FPS))
+    # # initiates a video Writer - location/filename, writing format, fps, size(dimensions)
+    # result = cv2.VideoWriter('motion_detection/filename.avi',  
+    #                        cv2.VideoWriter_fourcc(*'MJPG'), 
+    #                        fps, (534,400))
+
+    
     # Init frame variables
     first_frame = None
     next_frame = None
@@ -73,6 +62,8 @@ if __name__ == '__main__':
     delay_counter = 0
     movement_persistent_counter = 0
 
+
+    
     # LOOP!
     while True:
 
@@ -134,13 +125,18 @@ if __name__ == '__main__':
                 
                 # Draw a rectangle around big enough movements
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 1)
-                print(x,y,w,h)
+                # print(x,y,w,h)
+                # result.write(frame)
+        
+        
 
         # The moment something moves momentarily, reset the persistent
         # movement timer.
         if transient_movement_flag == True:
             movement_persistent_flag = True
             movement_persistent_counter = MOVEMENT_DETECTED_PERSISTENCE
+            cv2.imwrite("transientMotionDetector/frames/frame{}.jpg".format(count), frame)
+            count+=1
 
         # As long as there was a recent transient movement, say a movement
         # was detected    
@@ -169,7 +165,10 @@ if __name__ == '__main__':
         ch = cv2.waitKey(1)
         if ch & 0xFF == ord('q'):
             break
+        #10 -fps
 
+
+    
     # Cleanup when closed
     cv2.destroyAllWindows()
     cap.release()
