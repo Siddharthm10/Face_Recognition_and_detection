@@ -16,8 +16,8 @@
 - [x] - Motion Detection
 - [x] - Face Detection
 - [x] - Face Recognition
-- [ ] - Whatsapp Notification
-- [ ] - Liveness detection
+- [ ] - Liveness detection  
+ ~ [ ] - Whatsapp Notification - cancelled
 
 
 ### Note:
@@ -44,5 +44,16 @@
       - Potential Problems we might face: If there are multiple faces in an image(or multiple motions), it is not clear that how should we crop the image.
 
     - Another Potential Solution: Taking neural network zero logic to our advantage paint the entire region except the motion detected contour with black color. This will cause easy calculations and less computational time (probably)
+  - Solved: 
+    - Made a new pipeline to work with face_recognition task.(uses different face detection and recognition networks)
   
+---
+## Workflow:
 
+- bin - trash
+- blog - blog written for publication
+- camera_access - code for accessing the cameras (testing phase not important for the main code)
+- face_recognition - contains several implementations of face recognition
+- motion_detection - contains two implementation for motion detection
+
+--- 
