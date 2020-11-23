@@ -2,8 +2,8 @@
 import cv2
 import numpy as np
 import time 
-# import pandas as pd
-# from datetime import datetime
+import pandas as pd
+from datetime import datetime
 
 
 #initializing variables
@@ -11,7 +11,7 @@ first_frame = None #Stagnant frame from which we'll compare
 next_frame = None
 status_list = [None,None] # This keeps a record of motion
 times = [] #This keeps the time stamp of detected motion (different for different objects)
-#df = pd.DataFrame(columns = ["Start", "End"]) #columns to keep the record of motionstart and motionend
+df = pd.DataFrame(columns = ["Start", "End"]) #columns to keep the record of motionstart and motionend
 
 
 cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
@@ -35,7 +35,7 @@ while(True):
     if not ret:
     	print('couldnt access camera')
     	break
-    #status = 0
+    status = 0
     count = count + 1
     frame = frame[:][100:]
     #resized to 534*400(after trimming the time stamp)
@@ -62,7 +62,7 @@ while(True):
         if cv2.contourArea(contour)<1000:
             continue
         #motion Detected
-        #status = 1
+        status = 1
         #Drawing the rectangles around the contours identified
         (x, y, w, h) = cv2.boundingRect(contour)
         cv2.rectangle(frame, (x,y), (x+w, y+h), (0,255,0), 3)
@@ -72,16 +72,16 @@ while(True):
         result.write(frame)
     
     #appending the motion detection status
-    #status_list.append(status)
+    status_list.append(status)
 
     # Trimming the the status list to last two objects
-    #status_list = status_list[-2:]
+    status_list = status_list[-2:]
     #It means that the object has entered the frame
-    #if status_list[-1]==1 and status_list[-2]==0:
-    #    times.append(datetime.now())
+    if status_list[-1]==1 and status_list[-2]==0:
+       times.append(datetime.now())
     #It means that the object moving has left the frame
-    #if status_list[-1]==0 and status_list[-2]==1:
-    #   times.append(datetime.now())
+    if status_list[-1]==0 and status_list[-2]==1:
+      times.append(datetime.now())
     
     # Show Output
     # cv2.imshow('capturing', gray)#gray scale image
@@ -96,14 +96,14 @@ while(True):
     if key == ord('q'):
         break
 end = time.time()
-# print(status_list)
-# print(times)
-# print(120/ (end - start))
-#Appending the details (time) in the dataframe
-# for i in range(0, len(times),2):
-#     df = df.append({"Start": times[i], "End":times[i+1]},ignore_index=True)
-#Writing the csv file with the entry and exit time of the objects
-#df.to_csv("motion_detection/naive/Times.csv")
+print(status_list)
+print(times)
+print(120/ (end - start))
+# Appending the details (time) in the dataframe
+for i in range(0, len(times),2):
+    df = df.append({"Start": times[i], "End":times[i+1]},ignore_index=True)
+# Writing the csv file with the entry and exit time of the objects
+df.to_csv("motion_detection/naive/Times.csv")
 
 #Closing the camera access and the windows.
 cap.release()

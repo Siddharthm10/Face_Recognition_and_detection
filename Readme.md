@@ -54,6 +54,14 @@
 - blog - blog written for publication
 - camera_access - code for accessing the cameras (testing phase not important for the main code)
 - face_recognition - contains several implementations of face recognition
-- motion_detection - contains two implementation for motion detection
+    |
+    |- basic_api
+    |- Opencv_dnn_fr
+    |- Ultra_light_fr
+    |- withoutFR
 
+- motion_detection - contains two implementation for motion detection
+    |
+    |-naive
+    |-transientMotionDetector
 --- 
