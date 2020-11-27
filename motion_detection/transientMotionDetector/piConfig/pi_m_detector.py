@@ -44,10 +44,12 @@ if __name__ == '__main__':
     # Init display font and timeout counters
     font = cv2.FONT_HERSHEY_SIMPLEX
     delay_counter = 0
+    width = 400 
+    cap.get(cv2.Cap_)
     fps = int(cap.get(cv2.CAP_PROP_FPS))
     result = cv2.VideoWriter('motion_detection/transientMotionDetector/piConfig/Nov23.avi',  
                        cv2.VideoWriter_fourcc(*'MJPG'), 
-                       fps, (534,400))
+                       fps, (1066,400))
 
 
     # LOOP!
@@ -66,9 +68,8 @@ if __name__ == '__main__':
 
         # Resize and save a greyscale version of the image
         ratio = frame.shape[0]/frame.shape[1]
-        width = 750
-        # frame = cv2.resize(frame, (int(ratio*width), width))
-        frame = cv2.resize(frame, (534,400))
+        frame = cv2.resize(frame, (int(ratio*width), width))
+        # frame = cv2.resize(frame, (534,400))
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Blur it to remove camera noise (reducing false positives)
@@ -90,7 +91,7 @@ if __name__ == '__main__':
 
         # Compare the two frames, find the difference
         frame_delta = cv2.absdiff(gray, first_frame)
-        thresh = cv2.threshold(frame_delta, 30, 255, cv2.THRESH_BINARY)[1]
+        thresh = cv2.threshold(frame_delta, 40, 255, cv2.THRESH_BINARY)[1]
 
         # Fill in holes via dilate(), and find contours of the thesholds
         thresh = cv2.dilate(thresh, None, iterations = 1)
@@ -116,6 +117,7 @@ if __name__ == '__main__':
         if transient_movement_flag == True:
             # cv2.imwrite("./frames/frame{}.jpg".format(count), frame)
             # print("frame{} saved".format(count))
+            # stacked = np.hstack((frame_delta, frame))
             result.write(frame)
             count+=1
 

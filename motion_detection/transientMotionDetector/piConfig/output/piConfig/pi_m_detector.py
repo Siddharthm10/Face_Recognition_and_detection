@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     # Number of frames to pass before changing the frame to compare the current
     # frame against
-    FRAMES_TO_PERSIST = 100*150
+    FRAMES_TO_PERSIST = 1500 #1500/25*60  = 1 minute
 
     # Minimum boxed area for a detected motion to count as actual motion
     # Use to filter out noise or small objects
@@ -45,14 +45,16 @@ if __name__ == '__main__':
     font = cv2.FONT_HERSHEY_SIMPLEX
     delay_counter = 0
     fps = int(cap.get(cv2.CAP_PROP_FPS))
-    result = cv2.VideoWriter('Nov23.avi',  
+    result = cv2.VideoWriter('Nov25.avi',  
                        cv2.VideoWriter_fourcc(*'MJPG'), 
                        fps, (534,400))
 
-
+    startf = time.time()
+    timer = 0
     # LOOP!
     while True:
 
+        start =  time.time()
         # Set transient motion detected as false
         transient_movement_flag = False
 
@@ -65,14 +67,16 @@ if __name__ == '__main__':
             break
 
         # Resize and save a greyscale version of the image
-        ratio = frame.shape[0]/frame.shape[1]
-        width = 750
+        ratio = frame.shape[1]/frame.shape[0]
+        width = 400
         # frame = cv2.resize(frame, (int(ratio*width), width))
         frame = cv2.resize(frame, (534,400))
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Blur it to remove camera noise (reducing false positives)
         gray = cv2.GaussianBlur(gray, (21, 21), 0)
+
+        check1 = time.time()
 
         # If the first frame is nothing, initialise it
         if first_frame is None:
@@ -90,11 +94,13 @@ if __name__ == '__main__':
 
         # Compare the two frames, find the difference
         frame_delta = cv2.absdiff(gray, first_frame)
-        thresh = cv2.threshold(frame_delta, 30, 255, cv2.THRESH_BINARY)[1]
+        thresh = cv2.threshold(frame_delta, 40, 255, cv2.THRESH_BINARY)[1]
 
         # Fill in holes via dilate(), and find contours of the thesholds
         thresh = cv2.dilate(thresh, None, iterations = 1)
         cnts, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        check2 = time.time()
 
         # loop over the contours
         for c in cnts:
@@ -105,24 +111,30 @@ if __name__ == '__main__':
             # If the contour is too small, ignore it, otherwise, there's transient
             # movement
             if cv2.contourArea(c) > MIN_SIZE_FOR_MOVEMENT:
-                # result.write(frame)
-                cv2.imwrite("./frames/frame{}.jpg".format(count), frame)
+               #  stacked = np.hstack((frame_delta, frame))
+                result.write(frame)
+                # cv2.imwrite("./frames/frame{}.jpg".format(count), frame)
                 count+=1
                 # Draw a rectangle around big enough movements
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 1)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                result.write(frame)
+                transient_movement_flag = True
 
-
-
+        check3 = time.time()
+        if(transient_movement_flag):
+            print(check1-start, check2-check1, check3-check2)
+            timer+=(check3-start)
         # Interrupt trigger by pressing q to quit the open CV program
         ch = cv2.waitKey(1)
-        if count==20000:
+        if count==120:
             break
         if ch & 0xFF == ord('q'):
             break
-        #10 -fps
+        #22 -fps
 
-
-
+    endf = time.time()
+    # print(120/(endf-startf))
+    print("Fps :", (120/timer))
     # Cleanup when closed
     cv2.destroyAllWindows()
     cap.release()

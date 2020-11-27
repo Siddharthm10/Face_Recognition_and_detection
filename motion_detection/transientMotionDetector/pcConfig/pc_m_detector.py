@@ -55,7 +55,7 @@ if __name__ == '__main__':
     fps = int(cap.get(cv2.CAP_PROP_FPS))
     result = cv2.VideoWriter('motion_detection/transientMotionDetector/pcConfig/filename.avi',  
                        cv2.VideoWriter_fourcc(*'MJPG'), 
-                       fps, (534,400))
+                       fps, (1066,400) )
     
     # LOOP!
     while True:
@@ -73,9 +73,10 @@ if __name__ == '__main__':
             continue
 
         # Resize and save a greyscale version of the image
-        ratio = frame.shape[0]/frame.shape[1]
-        width = 750
-        frame = cv2.resize(frame, (ratio*width, width))
+        ratio = frame.shape[1]/frame.shape[0]
+        print(ratio)
+        width = 400
+        frame = cv2.resize(frame, (int(ratio*width), width))
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Blur it to remove camera noise (reducing false positives)
@@ -155,7 +156,11 @@ if __name__ == '__main__':
 
         # Splice the two video frames together to make one long horizontal one
         # np.hstack((frame_delta, frame))
-        cv2.imshow("frame", np.hstack((frame_delta, frame)))
+        stacked = np.hstack((frame_delta, frame))
+        print(frame_delta.shape)
+        print(frame.shape)
+        print(stacked.shape)
+        cv2.imshow("frame", stacked)
 
         # Interrupt trigger by pressing q to quit the open CV program
         ch = cv2.waitKey(1)
