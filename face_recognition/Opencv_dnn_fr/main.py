@@ -4,9 +4,6 @@ if __name__ == "__main__":
     import face_recognition as fr
     import numpy as np
     import pandas as pd
-    import onnx
-    import onnxruntime as ort
-    from onnx_tf.backend import prepare
     import time
     import json
     import cv2
