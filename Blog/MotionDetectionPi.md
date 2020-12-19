@@ -1,4 +1,4 @@
-# Motion Detection with Raspberry Pi
+# Motion Detection using OpenCV & Python
 
 Lately, CCTV security systems have multiple algorithms running to ensure safety, such as Face-Recognition, Object Detection, Theft Detection, Fire Alert, etcetera.
 We implement many algorithms on top of motion detection because there is no point in running all those processes on idle frames. In this article, we'll discuss implementing motion detection based video saving.
