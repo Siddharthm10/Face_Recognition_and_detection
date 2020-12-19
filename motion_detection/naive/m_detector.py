@@ -14,7 +14,8 @@ times = [] #This keeps the time stamp of detected motion (different for differen
 df = pd.DataFrame(columns = ["Start", "End"]) #columns to keep the record of motionstart and motionend
 
 
-cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
+#cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
+cap = cv2.VideoCapture('Friends_ross.mp4')
 # cap = cv2.VideoCapture(0)
 # frame_width = int(cap.get(3)) 
 # frame_height = int(cap.get(4)) 
@@ -28,8 +29,10 @@ result = cv2.VideoWriter('motion_detection/naive/filename.avi',
 
 # print("after")
 count = 0
+check0 = check1 = check2 = check3 = check4 = 0
 start =time.time()
 while(True):
+    check0 = time.time()
     #Read Input
     ret, frame = cap.read()
     if not ret:
@@ -48,14 +51,18 @@ while(True):
         first_frame = gray
         continue
 
+    check1 = time.time()
     #Calculates difference to detect motion
     delta_frame = cv2.absdiff(first_frame, gray)
     #Applies Threshold
     thresh_delta = cv2.threshold(delta_frame, 30, 255, cv2.THRESH_BINARY)[1]
     thresh_delta = cv2.dilate(thresh_delta, None, iterations=0)
+
+    check2 = time.time()
     #finding contours on the white portion(made by the threshold)
     cnts,_ = cv2.findContours(thresh_delta.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+    check3 = time.time()
     
     for contour in cnts:
         #Ignoring small Motions, i.e. noise and small insects
@@ -83,6 +90,7 @@ while(True):
     if status_list[-1]==0 and status_list[-2]==1:
       times.append(datetime.now())
     
+    check4 = time.time()
     # Show Output
     # cv2.imshow('capturing', gray)#gray scale image
     # cv2.imshow('delta', delta_frame)#difference btween the first and current frame
@@ -91,14 +99,19 @@ while(True):
 
     #Quiting (Reading the key)
     key = cv2.waitKey(1) 
-    # if count>120:
-        # break
+    if count>150:
+        break
     if key == ord('q'):
         break
 end = time.time()
-print(status_list)
-print(times)
-print(120/ (end - start))
+# print(status_list)
+# print(times)
+print(count/ (end - start))
+print("End : ",end - check4)
+print("Checkpoint 4 : ",check4 - check3)
+print("Checkpoint 3 : ",check3 - check2)
+print("Checkpoint 2 : ",check2 - check1)
+print("Checkpoint 1 : ", check1 - check0)
 # Appending the details (time) in the dataframe
 for i in range(0, len(times),2):
     df = df.append({"Start": times[i], "End":times[i+1]},ignore_index=True)

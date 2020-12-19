@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # from utils.predict import iou_of
     # from utils.predict import hard_nms
     # from utils.predict import predict
-    import utils.predict as ut
+    import face_recognition.Ultra_light_fr.utils.predict as ut
 
     # Initializing the variables
     path = 'face_recognition/Ultra_light_fr/images/known/'#Path of known images to compare from
@@ -51,6 +51,7 @@ if __name__ == "__main__":
 
     count = 0
     start = time.time()
+    end = time.time()
     while(True):
         success, frame = video_capture.read()
         if not success:

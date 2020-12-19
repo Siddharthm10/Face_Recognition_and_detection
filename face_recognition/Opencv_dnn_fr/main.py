@@ -1,20 +1,25 @@
+
 if __name__ == "__main__":  
     #importing Libraries and dependencies used:
-    from datetime import datetime
     import face_recognition as fr
+    import imutils
     import numpy as np
     import pandas as pd
     import time
     import json
     import cv2
     import os
-    import pickle
 
     # Initializing the variables
     # Paths
+    print("[INFO]: Loading models...")
     path = 'face_recognition/Opencv_dnn_fr/images/known/'#Path of known images to compare from
     modelFile = "face_recognition/Opencv_dnn_fr/model/res10_300x300_ssd_iter_140000.caffemodel"
     configFile = "face_recognition/Opencv_dnn_fr/model/deploy.prototxt.txt"
+    detector = cv2.dnn.readNetFromCaffe(configFile, modelFile)
+
+
+    print("[INFO] Loading Variables & known images Names")
     classNames = []#To append the filenames
     tolerance = 0.6#Threshold distance from the closest image
     myList = os.listdir(path)#adding all the item's name present at path
@@ -22,17 +27,17 @@ if __name__ == "__main__":
         classNames.append(os.path.splitext(cls)[0])
 
     #Reading the encodings
+    print("[INFO] Loading encodings...")
     with open("face_recognition/Opencv_dnn_fr/data/encodings.json", 'r+') as f:
         data = json.load(f)
 
     encodeListKnown = list(data.values())
 
-    #Load model & config file
-    net = cv2.dnn.readNetFromCaffe(configFile, modelFile)
 
     #Capturing video
-    # video_capture = cv2.VideoCapture(0)   
-    video_capture = cv2.VideoCapture("Friends_ross.mp4")
+    print("[INFO] Starting ...")
+    video_capture = cv2.VideoCapture(0)   
+    # video_capture = cv2.VideoCapture("Friends_ross.mp4")
     # video_capture = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
 
     count = 0
@@ -48,8 +53,10 @@ if __name__ == "__main__":
 
         # $$$ Facial Detection $$$ - model used - OpencV Resnet
         #####################Pre-Processing###########################
-        imgS = cv2.resize(frame, (300, 300)) #Resizing according to the face detection model
-        #getting the height and width to show the output according to the user
+        # imgS = cv2.resize(frame, (300, 300)) #Resizing according to the face detection model
+        frame = imutils.resize(frame, width=600)
+        imgS = frame
+        # getting the height and width to show the output according to the user
         h,w,_ = imgS.shape
         cv2.imwrite("face_recognition/Opencv_dnn_fr/1.jpg",imgS)
         # img_mean = np.array([104, 117, 123])
@@ -57,13 +64,15 @@ if __name__ == "__main__":
         # img = np.transpose(img, [2, 0, 1]) #transposing the shape accordingly
         # img = np.expand_dims(img, axis=0) 
         # img = img.astype(np.float32)
-        blob = cv2.dnn.blobFromImage(imgS, 1.0,
-        (300, 300), (104.0, 117.0, 123.0))
+        imageBlob = cv2.dnn.blobFromImage(
+            cv2.resize(frame, (300, 300)), 1.0, (300, 300),
+            (104.0, 177.0, 123.0), swapRB=False, crop=False)
         ##############################################################
         
         #predicting the bounding box
-        net.setInput(blob)
-        faces = net.forward()
+        print("[INFO] input_no {}".format(count))
+        detector.setInput(imageBlob)
+        faces = detector.forward()
         #to draw faces on image
         for i in range(faces.shape[2]):
             confidence = faces[0, 0, i, 2]
@@ -81,14 +90,15 @@ if __name__ == "__main__":
             facesCurFrame[:,[0,1,2,3]] = facesCurFrame[:,[1,2,3,0]]#Changing it as per requirements
 
         #seeing if any face is detected
+        print(".............................")
         print(boxes.shape[0], facesCurFrame.shape[0])
         print(type(boxes), type(facesCurFrame))
         print(boxes, "\n\n\n", facesCurFrame)
-        print("...")
+        print(".............................")
 
         #Encoding
         encodeCurFrame = fr.face_encodings(imgS, facesCurFrame)
-
+        print(".")
         #looping through faces
         for encodeFace, faceLoc in zip(encodeCurFrame, facesCurFrame):
             #Comparing faces
@@ -96,7 +106,7 @@ if __name__ == "__main__":
             matches = fr.compare_faces(encodeListKnown, encodeFace)
             faceDis = fr.face_distance(encodeListKnown, encodeFace)
             y1, x2, y2, x1 = faceLoc
-
+            print(".")
             matchIndex = np.argmin(faceDis)
             if faceDis[matchIndex]<tolerance:
                 if matches[matchIndex]:

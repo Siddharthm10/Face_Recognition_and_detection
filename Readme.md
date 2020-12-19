@@ -65,3 +65,33 @@
     |-naive
     |-transientMotionDetector
 --- 
+
+
+
+
+
+
+
+## Dlib installation
+- git clone https://github.com/davisking/dlib.git
+- cd dlib
+- mkdir build
+- cd build
+- cmake ..
+- cmake -build .
+- cd ..
+- python setup.py install
+<br>
+
+- Thing to remember:
+  - As of Dec 5,2020 CUDA doesnt support GNU 8+ so install dlib with downgraded version if u have GNU 9+
+  - sudo update-alternatives /usr/bin/gcc gcc /usr/bin/gcc-8 1
+  - sudo update-alternatives /usr/bin/gcc gcc /usr/bin/gcc-9 2
+  - sudo update-alternatives --config gcc 
+- Then select the gcc first before proceeding witht the dlib installation 
+
+KUDOS
+
+:)
+
+---

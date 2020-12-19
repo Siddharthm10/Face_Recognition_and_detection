@@ -137,7 +137,6 @@ if __name__ == "__main__":
     predictor = dlib.shape_predictor(args["shape_predictor"])
     fa = FaceAligner(predictor, desiredFaceWidth=256)
 
-    start = time.time()
     # load the input image, resize it, and convert it to grayscale
     image = cv2.imread(args["image"])
     image = imutils.resize(image, width=800)
@@ -147,7 +146,8 @@ if __name__ == "__main__":
     # image
     cv2.imshow("Input", image)
     rects = detector(gray, 2)
-    end = time.time()
+    # start = time.time()
+    # end = time.time()
     
     # loop over the face detections
     for rect in rects:
@@ -155,11 +155,15 @@ if __name__ == "__main__":
         # using facial landmarks
         (x, y, w, h) = rect_to_bb(rect)
         faceOrig = imutils.resize(image[y:y + h, x:x + w], width=256)
+        start = time.time()
         faceAligned = fa.align(image, gray, rect)
-
-        # display the output images
         end = time.time()
+        print(rect)
+        print(end-start)
+        # display the output images
         cv2.imshow("Original", faceOrig)
         cv2.imshow("Aligned", faceAligned)
         cv2.waitKey(0)
-    print(end-start)
+    
+    print(rects)
+    print(type(rects))
