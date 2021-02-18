@@ -1,17 +1,4 @@
 
-# def markAttendance(name):
-#     with open('Face_detection/attendance.csv', 'r+') as f:
-#         myDataList = f.readlines()
-#         nameList = []
-#         for line in myDataList:
-#             entry = line.split(',')
-#             nameList.append(entry[0])
-#         if name not in nameList:
-#             now = datetime.now()
-#             dtString = now.strftime('%H:%M:%S')
-#             f.writelines(f'\n{name},{dtString}')
-
-
 if __name__ == "__main__":
         
     import cv2
@@ -26,7 +13,9 @@ if __name__ == "__main__":
     images = []
     classNames = []
     tolerance = 0.6
+    fpsReport = 0
     name = "Unknown"
+    scaleFactor = 0.5
     myList = os.listdir(path)
     for cls in myList:
         curImg = cv2.imread(f'{path}/{cls}')
@@ -43,14 +32,14 @@ if __name__ == "__main__":
     # cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
 
     count = 0
-    start = time.time()
+    # start = time.time()
     while True:
-        
+        timeStamp = cv2.getTickCount()
         success, img = cap.read()
         # img = img[:][150:]
-        imgS = cv2.resize(img, (0,0), None, 0.5, 0.5)
+        imgS = cv2.resize(img, (0,0), None, scaleFactor, scaleFactor)
         imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
-        
+        count +=1        
 
         facesCurFrame = fr.face_locations(imgS, number_of_times_to_upsample=1)
         encodeCurFrame = fr.face_encodings(imgS, facesCurFrame)
@@ -63,7 +52,7 @@ if __name__ == "__main__":
                 if matches[matchIndex]:
                     name = classNames[matchIndex]
                     y1, x2, y2, x1 = faceLoc
-                    y1, x2, y2, x1 = y1*2, x2*2, y2*2, x1*2
+                    y1, x2, y2, x1 = int(y1/scaleFactor), int(x2/scaleFactor), int(y2/scaleFactor), int(x1/scaleFactor)
                     cv2.rectangle(img, (x1,y1), (x2,y2), (0,255,0),1)
                     cv2.rectangle(img, (x1,y2-35), (x2,y2),(0,255,255), cv2.FILLED)
                     cv2.putText(img, name, (x1+10,y2-10), cv2.FONT_HERSHEY_COMPLEX, 0.75, (0,0,0),1)
@@ -71,14 +60,14 @@ if __name__ == "__main__":
                     # markAttendance(name)
                 else:
                     y1, x2, y2, x1 = faceLoc
-                    y1, x2, y2, x1 = y1*2, x2*2, y2*2, x1*2
+                    y1, x2, y2, x1 = int(y1/scaleFactor), int(x2/scaleFactor), int(y2/scaleFactor), int(x1/scaleFactor)
                     cv2.rectangle(img, (x1,y1), (x2,y2), (0,0,255),2)
                     cv2.rectangle(img, (x1,y2-35), (x2,y2),(0,255,255), cv2.FILLED)
                     cv2.putText(img, name, (x1+6,y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),2)
 
             else:
                 y1, x2, y2, x1 = faceLoc
-                y1, x2, y2, x1 = y1*2, x2*2, y2*2, x1*2
+                y1, x2, y2, x1 = int(y1/scaleFactor), int(x2/scaleFactor), int(y2/scaleFactor), int(x1/scaleFactor)
                 cv2.rectangle(img, (x1,y1), (x2,y2), (0,0,255),2)
                 cv2.rectangle(img, (x1,y2-35), (x2,y2),(0,255,255), cv2.FILLED)
                 cv2.putText(img, name, (x1+10, y2-10), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0), 1)
@@ -86,15 +75,19 @@ if __name__ == "__main__":
  
         cv2.imshow("Webcam", img)
         count+=1
+        # dt = time.time() - timeStamp
+        fps = cv2.getTickFrequency()/(cv2.getTickCount() - timeStamp)
+        fpsReport = 0.95*fpsReport + 0.05*fps
+        print(fpsReport)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         
         if(count>120):
             break
-    end = time.time()
-    duration  = end - start
-    fps = 120/duration
-    print(fps)
+    # end = time.time()
+    # duration  = end - start
+    # fps = 120/duration
+    # print(fps)
     # print(fps) #- 5.2677 at 1/4 times resolution
                # - 9.026 at 1/2 times resolution
 

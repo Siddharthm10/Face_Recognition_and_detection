@@ -6,8 +6,8 @@ import os
 #resized to 534*400(after trimming the time stamp)
 # cv2.namedWindow("output", cv2.WINDOW_NORMAL) 
 # cv2.resizeWindow("output", 1920, 1080)
-# cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
-cap = cv2.VideoCapture("../Friends_ross.mp4")
+cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.0.104:554/')
+# cap = cv2.VideoCapture("../Friends_ross.mp4")
 # print("after")
 while(True):
     ret, frame = cap.read()

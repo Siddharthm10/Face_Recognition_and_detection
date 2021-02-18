@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
         # Resize and save a greyscale version of the image
         ratio = frame.shape[1]/frame.shape[0]
-        print(ratio)
+        # print(ratio)
         width = 400
         frame = cv2.resize(frame, (int(ratio*width), width))
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -94,6 +94,8 @@ if __name__ == '__main__':
         # motions if they're spread out far enough
         if delay_counter > FRAMES_TO_PERSIST:
             delay_counter = 0
+            print("Delay counter Reset")
+            print(delay_counter)
             first_frame = next_frame
 
             
@@ -118,7 +120,7 @@ if __name__ == '__main__':
             # movement
             if cv2.contourArea(c) > MIN_SIZE_FOR_MOVEMENT:
                 transient_movement_flag = True
-                
+                print("motion detected")
                 # Draw a rectangle around big enough movements
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 1)
                 # print(x,y,w,h)
@@ -129,7 +131,6 @@ if __name__ == '__main__':
         # The moment something moves momentarily, reset the persistent
         # movement timer.
         if transient_movement_flag == True:
-            movement_persistent_flag = True
             movement_persistent_counter = MOVEMENT_DETECTED_PERSISTENCE
             # cv2.imwrite("motion_detection/transientMotionDetector/pcConfig/frames/frame{}.jpg".format(count), frame)
             # count+=1
@@ -138,7 +139,7 @@ if __name__ == '__main__':
         # As long as there was a recent transient movement, say a movement
         # was detected    
         if movement_persistent_counter > 0:
-            text = "Movement Detected " + str(movement_persistent_counter)
+            text = "Movement Detected " + str(movement_persistent_counter) + "Delay Counter " + str(delay_counter)
             movement_persistent_counter -= 1
         else:
             text = "No Movement Detected"
@@ -157,9 +158,9 @@ if __name__ == '__main__':
         # Splice the two video frames together to make one long horizontal one
         # np.hstack((frame_delta, frame))
         stacked = np.hstack((frame_delta, frame))
-        print(frame_delta.shape)
-        print(frame.shape)
-        print(stacked.shape)
+        # print(frame_delta.shape)
+        # print(frame.shape)
+        # print(stacked.shape)
         cv2.imshow("frame", stacked)
 
         # Interrupt trigger by pressing q to quit the open CV program
